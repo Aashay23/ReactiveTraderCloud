@@ -1,0 +1,6 @@
+FROM microsoft/dotnet:latest
+WORKDIR /app
+COPY . .
+RUN dotnet restore
+RUN dotnet build --configuration Release
+CMD dotnet run -p Adaptive.ReactiveTrader.Server.Launcher --populate-eventstore
