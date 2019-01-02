@@ -2,4 +2,5 @@ FROM microsoft/dotnet:latest
 WORKDIR /app
 COPY . .
 RUN dotnet restore
-CMD dotnet run -p Adaptive.ReactiveTrader.Server.Launcher --populate-eventstore
+RUN dotnet run -p Adaptive.ReactiveTrader.Server.Launcher --populate-eventstore
+CMD dotnet run -p Adaptive.ReactiveTrader.Server.Launcher all

@@ -1,8 +1,0 @@
-version: '3'
-services:
-  broker:
-    image: 'crossbario/crossbar:community'
-    ports:
-      - '8080:8080'
-    volumes:
-      - ./broker:/node

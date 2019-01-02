@@ -1,21 +1,27 @@
 version: '3'
 services:
-  crossbar:
-    image: 'crossbario/crossbar:latest'
   eventstore:
-    image: 'eventstore/eventstore:latest'
-  api:
+    image: 'eventstore/eventstore'
+    ports:
+      - '1113:1113'
+      - '2113:2113'
+  broker:
+    image: 'crossbario/crossbar:community'
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./server/.crossbar:/node/.crossbar
+  servers:
     build:
       dockerfile: Dockerfile.dev
       context: ./server
-    ports:
-      - '8000:8000'
-  client:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
-    ports:
-      - '3000:3000'
+  #Stuck on event store population, check deploy scripts
+  #client:
+  #  build:
+  #    dockerfile: Dockerfile.dev
+  #    context: ./client
+  #  volumes:
+  #    - /app/node_modules
+  #    - ./client:/app
+  #  ports:
+  #    - '3000:3000'
