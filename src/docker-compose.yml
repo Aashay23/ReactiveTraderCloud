@@ -1,7 +1,7 @@
 version: '3'
 services:
   eventstore:
-    image: 'eventstore/eventstore'
+    image: 'eventstore/eventstore:release-3.7.0'
     ports:
       - '1113:1113'
       - '2113:2113'
@@ -13,7 +13,7 @@ services:
       - ./server/.crossbar:/node/.crossbar
   servers:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: ./server
   #Stuck on event store population, check deploy scripts
   #client:
