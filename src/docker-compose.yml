@@ -15,13 +15,57 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-  #Stuck on event store population, check deploy scripts
-  #client:
-  #  build:
-  #    dockerfile: Dockerfile.dev
-  #    context: ./client
-  #  volumes:
-  #    - /app/node_modules
-  #    - ./client:/app
-  #  ports:
-  #    - '3000:3000'
+    command: 'dotnet run -p Adaptive.ReactiveTrader.Server.Launcher --populate-eventstore'
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - '3000:3000'
+  analytics:
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.Analytics config.docker.json'
+    depends_on:
+      - broker
+      - eventstore
+  pricing:
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.Pricing config.docker.json'
+    depends_on:
+      - broker
+      - eventstore
+      - analytics
+  referencedataread:
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.ReferenceDataRead config.docker.json'
+    depends_on:
+      - broker
+      - eventstore
+      - pricing
+  tradeexecution:
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.TradeExecution config.docker.json'
+    depends_on:
+      - broker
+      - eventstore
+      - referencedataread
+  blotter:
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.Blotter config.docker.json'
+    depends_on:
+      - broker
+      - eventstore
+      - tradeexecution
