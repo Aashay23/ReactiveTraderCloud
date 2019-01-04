@@ -30,6 +30,7 @@
     "start:openfin:cloud": "npm-run-all -p openfin start:cloud",
     "build": "react-scripts-ts build",
     "build:local": "cross-env REACT_APP_ENV=local npm run build",
+    "build:docker": "cross-env REACT_APP_ENV=docker npm run build",
     "build:cloud": "cross-env REACT_APP_ENV=demo npm run build",
     "test": "react-scripts-ts test --env=jsdom",
     "analyze": "source-map-explorer build/static/js/main.*",
