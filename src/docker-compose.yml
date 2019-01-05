@@ -15,14 +15,9 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet run -p Adaptive.ReactiveTrader.Server.Launcher --populate-eventstore'
-  analytics:
-    build:
-      dockerfile: Dockerfile
-      context: ./server
-    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.Launcher a'
     depends_on:
-      - servers
+      - eventstore
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Launcher.dll --populate-eventstore'
   client:
     build:
       dockerfile: Dockerfile
@@ -36,7 +31,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.Analytics config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Analytics.dll config.docker.json'
     depends_on:
       - broker
       - eventstore
@@ -44,7 +39,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.Pricing config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Pricing.dll config.docker.json'
     depends_on:
       - broker
       - eventstore
@@ -53,7 +48,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.ReferenceDataRead config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.ReferenceDataRead.dll config.docker.json'
     depends_on:
       - broker
       - eventstore
@@ -62,7 +57,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.TradeExecution config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.TradeExecution.dll config.docker.json'
     depends_on:
       - broker
       - eventstore
@@ -71,7 +66,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet run --configuration Release -p Adaptive.ReactiveTrader.Server.Blotter config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Blotter.dll config.docker.json'
     depends_on:
       - broker
       - eventstore
