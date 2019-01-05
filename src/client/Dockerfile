@@ -3,7 +3,7 @@ WORKDIR '/app'
 COPY ./package.json ./
 RUN npm install
 COPY . .
-RUN npm run build:docker
+RUN npm run build:local
 
 FROM nginx
 EXPOSE 3000
