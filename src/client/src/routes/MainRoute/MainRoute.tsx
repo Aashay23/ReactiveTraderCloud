@@ -9,25 +9,19 @@ import { AutobahnConnectionProxy } from 'rt-system'
 import { ThemeProvider } from 'rt-theme'
 
 import { createApplicationServices } from '../../applicationServices'
-import { getEnvVars } from '../../config/config'
 import configureStore from '../../configureStore'
 import { Router } from '../../shell'
 import FakeUserRepository from '../../shell/fakeUserRepository'
 import GlobalScrollbarStyle from '../../shell/GlobalScrollbarStyle'
 import { OpenFinLimitChecker } from '../../shell/openFin'
 
-const config = getEnvVars(process.env.REACT_APP_ENV!)
 const LOG_NAME = 'Application Service: '
 
 const platform = new Platform()
 
 const store = configureStore(
   createApplicationServices({
-    autobahn: new AutobahnConnectionProxy(
-      (config.overwriteServerEndpoint ? config.serverEndpointUrl : location.hostname)!,
-      'com.weareadaptive.reactivetrader',
-      +(config.overwriteServerEndpoint ? config.serverPort : location.port)!,
-    ),
+    autobahn: new AutobahnConnectionProxy(location.hostname, 'com.weareadaptive.reactivetrader', +location.port),
     limitChecker: new OpenFinLimitChecker(),
     platform,
     user: FakeUserRepository.currentUser,
