@@ -2,13 +2,8 @@ version: '3'
 services:
   eventstore:
     image: 'eventstore/eventstore:release-3.7.0'
-    ports:
-      - '1113:1113'
-      - '2113:2113'
   broker:
     image: 'crossbario/crossbar:community'
-    ports:
-      - '8000:8000'
     volumes:
       - ./server/.crossbar:/node/.crossbar
   servers:
@@ -29,14 +24,11 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
   analytics:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Analytics.dll config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Analytics.dll config.prod.json'
     depends_on:
       - broker
       - eventstore
@@ -44,7 +36,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Pricing.dll config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Pricing.dll config.prod.json'
     depends_on:
       - broker
       - eventstore
@@ -53,7 +45,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet ./Adaptive.ReactiveTrader.Server.ReferenceDataRead.dll config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.ReferenceDataRead.dll config.prod.json'
     depends_on:
       - broker
       - eventstore
@@ -62,7 +54,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet ./Adaptive.ReactiveTrader.Server.TradeExecution.dll config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.TradeExecution.dll config.prod.json'
     depends_on:
       - broker
       - eventstore
@@ -71,7 +63,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Blotter.dll config.docker.json'
+    command: 'dotnet ./Adaptive.ReactiveTrader.Server.Blotter.dll config.prod.json'
     depends_on:
       - broker
       - eventstore
